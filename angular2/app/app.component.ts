@@ -1,27 +1,11 @@
 import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
+
 import { Blog } from './blog';
 import { BlogListComponent } from './blog-list.component';
 import { BlogEditComponent } from './blog-edit.component';
+import { BlogService } from './blog.service';
 
-const BLOGS: Blog[] = [{
-		title: "Blog Post 1",
-		author: "Me",
-		date: new Date(),
-		summary: "#1",
-		content: "This is blog post #1!"
-	}, {
-		title: "Blog Post 2",
-		author: "Me",
-		date: new Date(),
-		summary: "#2",
-		content: "This is blog post #2!"
-	}, {
-		title: "Blog Post 3",
-		author: "Me",
-		date: new Date(),
-		summary: "#3",
-		content: "This is blog post #3!"
-	}];
 
 @Component({
 	selector: 'my-app',
@@ -31,9 +15,10 @@ const BLOGS: Blog[] = [{
 	<div>{{option1}}</div>
 	<div>{{option2}}</div>
 	<div>{{option3}}</div>
-	`
+	`,
+	providers: [BlogService]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 	title = "The Treasured Tears Project";
 	byline = "You have kept count of my wanderings and put my tears in your bottle. Are they not in your book? Psalm 56:8"
 	option1 = "Resources";
@@ -41,7 +26,18 @@ export class AppComponent {
 	group1 = "Survivors";
 	group2 = "People Helpers";
 	group3 = "Friends & Family"
-	blogs = BLOGS; 
+
+	blogs: Blog[];
+
+	constructor(private blogService: BlogService) { }
+
+	getBlogs(): void {
+    this.blogService.getBlogs().then(blogs => this.blogs = blogs);
+  }
+
+	ngOnInit(): void {
+		this.getBlogs();
+  }
 
 
 	
